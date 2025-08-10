@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AnnSeva- Community Food Sharing Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-bg { background: linear-gradient(135deg, #1fc190 0%, #059669 100%); }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .pulse-dot { animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        .fade-in { animation: fadeIn 0.5s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .impact-counter { animation: countUp 2s ease-out; }
+        @keyframes countUp { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <header class="gradient-bg text-white shadow-lg sticky top-0 z-40">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center">
+                        <span class="text-2xl"> </span>
+                    </div>
+                    <h1 class="text-2xl font-bold">AnnSeva</h1>
+                </div>
+                <nav class="hidden md:flex items-center space-x-6">
+                    <button onclick="showSection('browse')" class="hover:text-green-200 transition-colors">Browse Food</button>
+                    <button onclick="showSection('donate')" class="hover:text-green-200 transition-colors">Donate Food</button>
+                    <button onclick="showSection('impact')" class="hover:text-green-200 transition-colors">Impact</button>
+                    <button onclick="showSection('ngo')" class="hover:text-green-200 transition-colors">NGO Portal</button>
+                </nav>
+                <div class="flex items-center space-x-4">
+                    <div class="flex items-center space-x-2 bg-white/20 rounded-full px-4 py-2">
+                        <span class="text-sm">📍</span>
+                        <span class="text-sm font-medium">Mumbai,Maharashtra</span>
+                    </div>
+                    <button class="bg-white text-green-600 px-4 py-2 rounded-full font-semibold hover:bg-green-50 transition-colors">
+                        Sign In
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="hero" class="gradient-bg text-white py-16">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-5xl font-bold mb-6">Fighting Food Waste,<br>Feeding Communities</h2>
+            <p class="text-xl mb-8 max-w-3xl mx-auto opacity-90">Connect restaurants, events, and individuals with NGOs and people in need. Every meal saved makes a difference.</p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button onclick="showSection('browse')" class="bg-white text-green-600 px-8 py-4 rounded-full font-semibold text-lg hover:bg-green-50 transition-all transform hover:scale-105">
+                    🔍 Find Food Near You
+                </button>
+                <button onclick="showSection('donate')" class="bg-green-700 text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-green-800 transition-all transform hover:scale-105">
+                    🤝 Donate Food
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Impact Stats -->
+    <section class="py-12 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
+                <div class="impact-counter">
+                    <div class="text-4xl font-bold text-green-600 mb-2">12,847</div>
+                    <div class="text-gray-600">Meals Saved</div>
+                </div>
+                <div class="impact-counter">
+                    <div class="text-4xl font-bold text-blue-600 mb-2">2,156</div>
+                    <div class="text-gray-600">People Fed</div>
+                </div>
+                <div class="impact-counter">
+                    <div class="text-4xl font-bold text-purple-600 mb-2">89</div>
+                    <div class="text-gray-600">Partner NGOs</div>
+                </div>
+                <div class="impact-counter">
+                    <div class="text-4xl font-bold text-orange-600 mb-2">5.2 tons</div>
+                    <div class="text-gray-600">Waste Prevented</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Browse Food Section -->
+    <section id="browse-section" class="py-12 hidden">
+        <div class="container mx-auto px-6">
+            <div class="flex items-center justify-between mb-8">
+                <h2 class="text-3xl font-bold text-gray-800">Available Food Near You</h2>
+                <div class="flex items-center space-x-4">
+                    <select class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                        <option>All Categories</option>
+                        <option>Restaurant Leftovers</option>
+                        <option>Event Surplus</option>
+                        <option>Home Cooked</option>
+                        <option>Bakery Items</option>
+                    </select>
+                    <select class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                        <option>Within 5 miles</option>
+                        <option>Within 10 miles</option>
+                        <option>Within 25 miles</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Food Listing 1 -->
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover">
+                    <div class="relative">
+                        <div class="h-48 bg-gradient-to-br from-orange-400 to-red-500 flex items-center justify-center">
+                            <span class="text-6xl">🍕</span>
+                        </div>
+                        <div class="absolute top-4 right-4 bg-green-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                            Available Now
+                        </div>
+                        <div class="absolute top-4 left-4 bg-white/90 text-gray-800 px-3 py-1 rounded-full text-sm font-semibold">
+                            🏪 Restaurant
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Fresh Pizza & Salads</h3>
+                        <p class="text-gray-600 mb-3">Mario's Italian Kitchen - End of day surplus. Fresh ingredients, perfect for 15-20 people.</p>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center space-x-2">
+                                <span class="text-sm text-gray-500">📍 0.8 miles away</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <span class="text-sm text-gray-500">⏰ Expires in 2 hours</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="text-sm text-gray-600">
+                                <span class="font-semibold">Serves:</span> 15-20 people
+                            </div>
+                            <button onclick="claimFood('pizza')" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-semibold transition-colors">
+                                Claim Food
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Food Listing 2 -->
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover">
+                    <div class="relative">
+                        <div class="h-48 bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center">
+                            <span class="text-6xl">🥪</span>
+                        </div>
+                        <div class="absolute top-4 right-4 bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                            Reserved
+                        </div>
+                        <div class="absolute top-4 left-4 bg-white/90 text-gray-800 px-3 py-1 rounded-full text-sm font-semibold">
+                            🎪 Event
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Catered Sandwiches & Wraps</h3>
+                        <p class="text-gray-600 mb-3">Corporate Event Surplus - Variety of sandwiches and wraps from premium catering.</p>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center space-x-2">
+                                <span class="text-sm text-gray-500">📍 1.2 miles away</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <span class="text-sm text-gray-500">⏰ Expires in 4 hours</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="text-sm text-gray-600">
+                                <span class="font-semibold">Serves:</span> 25-30 people
+                            </div>
+                            <button class="bg-gray-400 text-white px-4 py-2 rounded-lg font-semibold cursor-not-allowed">
+                                Reserved by Hope Kitchen
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Food Listing 3 -->
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover">
+                    <div class="relative">
+                        <div class="h-48 bg-gradient-to-br from-pink-400 to-purple-500 flex items-center justify-center">
+                            <span class="text-6xl">🧁</span>
+                        </div>
+                        <div class="absolute top-4 right-4 bg-green-500 text-white px-3 py-1 rounded-full text-sm font-semibold pulse-dot">
+                            Available Now
+                        </div>
+                        <div class="absolute top-4 left-4 bg-white/90 text-gray-800 px-3 py-1 rounded-full text-sm font-semibold">
+                            🧁 Bakery
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Fresh Pastries & Bread</h3>
+                        <p class="text-gray-600 mb-3">Sweet Dreams Bakery - Day-old pastries, muffins, and artisan bread. Still fresh and delicious!</p>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center space-x-2">
+                                <span class="text-sm text-gray-500">📍 0.5 miles away</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <span class="text-sm text-gray-500">⏰ Expires in 6 hours</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="text-sm text-gray-600">
+                                <span class="font-semibold">Serves:</span> 10-15 people
+                            </div>
+                            <button onclick="claimFood('pastries')" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-semibold transition-colors">
+                                Claim Food
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Food Listing 4 -->
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover">
+                    <div class="relative">
+                        <div class="h-48 bg-gradient-to-br from-green-400 to-blue-500 flex items-center justify-center">
+                            <span class="text-6xl">🥗</span>
+                        </div>
+                        <div class="absolute top-4 right-4 bg-green-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                            Available Now
+                        </div>
+                        <div class="absolute top-4 left-4 bg-white/90 text-gray-800 px-3 py-1 rounded-full text-sm font-semibold">
+                            🏠 Individual
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Homemade Vegetarian Meals</h3>
+                        <p class="text-gray-600 mb-3">Family gathering leftovers - Healthy vegetarian dishes including salads, rice, and curry.</p>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center space-x-2">
+                                <span class="text-sm text-gray-500">📍 2.1 miles away</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <span class="text-sm text-gray-500">⏰ Expires in 3 hours</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="text-sm text-gray-600">
+                                <span class="font-semibold">Serves:</span> 8-10 people
+                            </div>
+                            <button onclick="claimFood('vegetarian')" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-semibold transition-colors">
+                                Claim Food
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Donate Food Section -->
+    <section id="donate-section" class="py-12 hidden">
+        <div class="container mx-auto px-6">
+            <div class="max-w-2xl mx-auto">
+                <h2 class="text-3xl font-bold text-gray-800 text-center mb-8">Donate Food to Your Community</h2>
+                <div class="bg-white rounded-xl shadow-lg p-8">
+                    <form id="donate-form">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Food Type</label>
+                                <select class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                                    <option>Restaurant Leftovers</option>
+                                    <option>Event Surplus</option>
+                                    <option>Home Cooked Meals</option>
+                                    <option>Bakery Items</option>
+                                    <option>Packaged Foods</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Serves How Many?</label>
+                                <input type="number" placeholder="e.g., 20" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                            </div>
+                        </div>
+
+                        <div class="mb-6">
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Food Description</label>
+                            <textarea rows="3" placeholder="Describe the food items, ingredients, dietary restrictions, etc." class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"></textarea>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Pickup Address</label>
+                                <input type="text" placeholder="123 Main St, City, State" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Available Until</label>
+                                <input type="datetime-local" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                            </div>
+                        </div>
+
+                        <div class="mb-6">
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Contact Information</label>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <input type="text" placeholder="Your Name" class="px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                                <input type="tel" placeholder="Phone Number" class="px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                            </div>
+                        </div>
+
+                        <div class="mb-6">
+                            <label class="flex items-center space-x-3">
+                                <input type="checkbox" class="w-5 h-5 text-green-600 rounded focus:ring-green-500">
+                                <span class="text-sm text-gray-700">I confirm this food is safe for consumption and was prepared in sanitary conditions</span>
+                            </label>
+                        </div>
+
+                        <button type="submit" onclick="submitDonation()" class="w-full bg-green-500 hover:bg-green-600 text-white py-4 rounded-lg font-semibold text-lg transition-colors">
+                            🤝 List Food for Donation
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Impact Section -->
+    <section id="impact-section" class="py-12 hidden">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl font-bold text-gray-800 text-center mb-12">Community Impact</h2>
+            
+            <!-- Impact Map -->
+            <div class="bg-white rounded-xl shadow-lg p-8 mb-12">
+                <h3 class="text-2xl font-semibold text-gray-800 mb-6">Food Sharing Activity Map</h3>
+                <div class="h-96 bg-gradient-to-br from-green-100 to-blue-100 rounded-lg flex items-center justify-center relative overflow-hidden">
+                    <div class="text-center">
+                        <span class="text-6xl mb-4 block">🗺️</span>
+                        <p class="text-gray-600 text-lg">Interactive map showing real-time food sharing activity</p>
+                    </div>
+                    <!-- Simulated map pins -->
+                    <div class="absolute top-20 left-32 w-4 h-4 bg-green-500 rounded-full pulse-dot"></div>
+                    <div class="absolute top-40 right-40 w-4 h-4 bg-blue-500 rounded-full pulse-dot"></div>
+                    <div class="absolute bottom-32 left-48 w-4 h-4 bg-red-500 rounded-full pulse-dot"></div>
+                    <div class="absolute bottom-20 right-32 w-4 h-4 bg-purple-500 rounded-full pulse-dot"></div>
+                </div>
+            </div>
+
+            <!-- Success Stories -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <div class="bg-white rounded-xl shadow-lg p-8">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mr-4">
+                            <span class="text-2xl">🏪</span>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-semibold text-gray-800">Tony's Pizza Palace</h4>
+                            <p class="text-sm text-gray-600">Restaurant Partner</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 mb-4">"Since joining FoodShare 6 months ago, we've donated over 500 meals that would have gone to waste. It feels amazing to help our community while reducing our environmental impact."</p>
+                    <div class="text-sm text-green-600 font-semibold">✅ 500+ meals donated</div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-lg p-8">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-4">
+                            <span class="text-2xl">🤝</span>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-semibold text-gray-800">Hope Kitchen NGO</h4>
+                            <p class="text-sm text-gray-600">Community Partner</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 mb-4">"FoodShare has revolutionized how we source food for our community programs. The platform makes it easy to find fresh, quality meals for the families we serve."</p>
+                    <div class="text-sm text-blue-600 font-semibold">✅ 1,200+ people fed</div>
+                </div>
+            </div>
+
+            <!-- Environmental Impact -->
+            <div class="bg-gradient-to-r from-green-500 to-blue-600 rounded-xl text-white p-8 text-center">
+                <h3 class="text-2xl font-bold mb-6">Environmental Impact</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div>
+                        <div class="text-4xl font-bold mb-2">5.2 tons</div>
+                        <div class="text-green-100">Food Waste Prevented</div>
+                    </div>
+                    <div>
+                        <div class="text-4xl font-bold mb-2">12.8 tons</div>
+                        <div class="text-green-100">CO₂ Emissions Saved</div>
+                    </div>
+                    <div>
+                        <div class="text-4xl font-bold mb-2">890,000</div>
+                        <div class="text-green-100">Gallons Water Saved</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NGO Portal Section -->
+    <section id="ngo-section" class="py-12 hidden">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl font-bold text-gray-800 text-center mb-12">NGO & Organization Portal</h2>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <!-- Registration Form -->
+                <div class="bg-white rounded-xl shadow-lg p-8">
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-6">Register Your Organization</h3>
+                    <form>
+                        <div class="mb-6">
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Organization Name</label>
+                            <input type="text" placeholder="e.g., Hope Kitchen Community Center" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Organization Type</label>
+                            <select class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                                <option>Non-Profit Organization</option>
+                                <option>Community Center</option>
+                                <option>Food Bank</option>
+                                <option>Homeless Shelter</option>
+                                <option>Religious Organization</option>
+                                <option>School/Educational Institution</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-6">
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Service Area</label>
+                            <input type="text" placeholder="City, State or Zip Code" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                        </div>
+
+                        <div class="mb-6">
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">People Served Monthly</label>
+                            <select class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                                <option>1-50 people</option>
+                                <option>51-200 people</option>
+                                <option>201-500 people</option>
+                                <option>500+ people</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-6">
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Contact Information</label>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <input type="email" placeholder="Email Address" class="px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                                <input type="tel" placeholder="Phone Number" class="px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                            </div>
+                        </div>
+
+                        <button type="submit" onclick="registerNGO()" class="w-full bg-blue-500 hover:bg-blue-600 text-white py-4 rounded-lg font-semibold text-lg transition-colors">
+                            🤝 Register Organization
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Partner Organizations -->
+                <div class="space-y-6">
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-4">Partner Organizations</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                                        <span class="text-xl">🏠</span>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-gray-800">Hope Kitchen</h4>
+                                        <p class="text-sm text-gray-600">Community Kitchen • 200+ people/month</p>
+                                    </div>
+                                </div>
+                                <div class="text-green-600 font-semibold">✅ Verified</div>
+                            </div>
+
+                            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
+                                        <span class="text-xl">🏫</span>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-gray-800">Unity Shelter</h4>
+                                        <p class="text-sm text-gray-600">Homeless Shelter • 150+ people/month</p>
+                                    </div>
+                                </div>
+                                <div class="text-green-600 font-semibold">✅ Verified</div>
+                            </div>
+
+                            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                                        <span class="text-xl">🍎</span>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-gray-800">City Food Bank</h4>
+                                        <p class="text-sm text-gray-600">Food Bank • 500+ families/month</p>
+                                    </div>
+                                </div>
+                                <div class="text-green-600 font-semibold">✅ Verified</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl text-white p-6">
+                        <h3 class="text-xl font-bold mb-4">Benefits for Partner NGOs</h3>
+                        <ul class="space-y-2">
+                            <li class="flex items-center space-x-2">
+                                <span class="text-blue-200">✓</span>
+                                <span>Priority access to food donations</span>
+                            </li>
+                            <li class="flex items-center space-x-2">
+                                <span class="text-blue-200">✓</span>
+                                <span>Real-time notifications for nearby food</span>
+                            </li>
+                            <li class="flex items-center space-x-2">
+                                <span class="text-blue-200">✓</span>
+                                <span>Impact tracking and reporting tools</span>
+                            </li>
+                            <li class="flex items-center space-x-2">
+                                <span class="text-blue-200">✓</span>
+                                <span>Community recognition and visibility</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Claim Food Modal -->
+    <div id="claim-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-xl shadow-2xl max-w-md w-full mx-4">
+            <div class="p-6 border-b">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-2xl font-bold text-gray-800">Claim Food</h2>
+                    <button onclick="closeClaimModal()" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+                </div>
+            </div>
+            <div class="p-6">
+                <div class="mb-6">
+                    <h3 id="claim-food-title" class="text-lg font-semibold text-gray-800 mb-2"></h3>
+                    <p class="text-gray-600">Please provide your information to claim this food donation.</p>
+                </div>
+                
+                <form>
+                    <div class="mb-4">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Your Name/Organization</label>
+                        <input type="text" placeholder="Enter your name or organization" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Contact Number</label>
+                        <input type="tel" placeholder="Your phone number" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Pickup Time</label>
+                        <select class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                            <option>Within 30 minutes</option>
+                            <option>Within 1 hour</option>
+                            <option>Within 2 hours</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <label class="flex items-center space-x-3">
+                            <input type="checkbox" class="w-5 h-5 text-green-600 rounded focus:ring-green-500">
+                            <span class="text-sm text-gray-700">I will pick up the food at the specified time and location</span>
+                        </label>
+                    </div>
+                    
+                    <button type="submit" onclick="confirmClaim()" class="w-full bg-green-500 hover:bg-green-600 text-white py-3 rounded-lg font-semibold transition-colors">
+                        Confirm Claim
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSection = 'hero';
+        let claimedFood = '';
+
+        function showSection(section) {
+            // Hide all sections
+            document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
+            
+            // Show selected section
+            if (section === 'browse') {
+                document.getElementById('browse-section').classList.remove('hidden');
+                document.getElementById('browse-section').classList.add('fade-in');
+            } else if (section === 'donate') {
+                document.getElementById('donate-section').classList.remove('hidden');
+                document.getElementById('donate-section').classList.add('fade-in');
+            } else if (section === 'impact') {
+                document.getElementById('impact-section').classList.remove('hidden');
+                document.getElementById('impact-section').classList.add('fade-in');
+            } else if (section === 'ngo') {
+                document.getElementById('ngo-section').classList.remove('hidden');
+                document.getElementById('ngo-section').classList.add('fade-in');
+            }
+            
+            currentSection = section;
+        }
+
+        function claimFood(foodType) {
+            claimedFood = foodType;
+            const titles = {
+                'pizza': 'Fresh Pizza & Salads',
+                'pastries': 'Fresh Pastries & Bread',
+                'vegetarian': 'Homemade Vegetarian Meals'
+            };
+            
+            document.getElementById('claim-food-title').textContent = titles[foodType] || 'Food Item';
+            document.getElementById('claim-modal').classList.remove('hidden');
+            document.getElementById('claim-modal').classList.add('flex');
+        }
+
+        function closeClaimModal() {
+            document.getElementById('claim-modal').classList.add('hidden');
+            document.getElementById('claim-modal').classList.remove('flex');
+        }
+
+        function confirmClaim() {
+            event.preventDefault();
+            alert('🎉 Food claimed successfully! You will receive pickup details via SMS. The donor has been notified of your claim.');
+            closeClaimModal();
+            
+            // Update the UI to show the food as claimed
+            setTimeout(() => {
+                location.reload(); // Simulate real-time update
+            }, 1000);
+        }
+
+        function submitDonation() {
+            event.preventDefault();
+            alert('🤝 Thank you for your donation! Your food listing is now live and nearby NGOs and individuals will be notified. You\'ll receive updates when someone claims your food.');
+            
+            // Reset form
+            document.getElementById('donate-form').reset();
+        }
+
+        function registerNGO() {
+            event.preventDefault();
+            alert('✅ Registration submitted! We\'ll review your application and get back to you within 24 hours. Thank you for joining our mission to fight food waste!');
+        }
+
+        // Simulate real-time updates
+        setInterval(() => {
+            // Update impact counters
+            const counters = document.querySelectorAll('.impact-counter div:first-child');
+            counters.forEach(counter => {
+                const current = parseInt(counter.textContent.replace(/,/g, ''));
+                const increment = Math.floor(Math.random() * 3) + 1;
+                const newValue = current + increment;
+                counter.textContent = newValue.toLocaleString();
+            });
+        }, 30000); // Update every 30 seconds
+
+        // Initialize with hero section
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add some initial animations
+            setTimeout(() => {
+                document.querySelectorAll('.impact-counter').forEach((el, index) => {
+                    setTimeout(() => {
+                        el.style.animation = 'countUp 0.8s ease-out';
+                    }, index * 200);
+                });
+            }, 1000);
+        });
+
+        // Add notification system
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg text-white ${type === 'success' ? 'bg-green-500' : 'bg-blue-500'} fade-in`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 5000);
+        }
+
+        // Simulate real-time notifications
+        setTimeout(() => {
+            showNotification('🍕 New food donation available 0.3 miles away!');
+        }, 10000);
+
+        setTimeout(() => {
+            showNotification('🤝 Your donation was claimed by Hope Kitchen!', 'success');
+        }, 25000);
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96c82d8273f63aef',t:'MTc1NDc1MjIwMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
